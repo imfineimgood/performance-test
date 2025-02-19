@@ -128,3 +128,20 @@
   - 시스템 환경변수로서 기본적으로 제공되는 값들이 있으며, 사용자 정의 변수도 설정 가능.
 - 보안성: 민감하지 않은 설정 값들은 일반 환경변수로 관리, 민감한 정보는 Repository Secret을 활용하여 관리하는 것이 좋음.
 - 설정 방법: YAML 파일 내에서 env 키워드를 사용하여 변수 값을 설정 가능.
+
+## CDN과 성능 최적화
+
+#### 테스트 환경
+- S3 버킷 웹사이트 엔드포인트 : [http://jdj-aws-bucket.s3-website-ap-southeast-2.amazonaws.com/](http://bucket-nahee.s3-website-ap-northeast-1.amazonaws.com)
+- CloudFront 배포 도메인 이름 : [https://d2hnnj815xakwr.cloudfront.net](https://d2xkqga3hcd31j.cloudfront.net)
+
+CloudFront에 요청한 컨텐츠는 X-Cache: Hit from cloudfront 라는 헤더가 붙는다
+
+|분류|S3|CloduFront|
+|----|----|----|
+|X-Cache 유무|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/052f41a8-c0a1-4e39-a957-afe78f9efd19" />|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/8a6b3a85-5fcb-405d-89a1-774346e8cd0e" />|
+|size & time 비교|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/5f8b9cf7-8996-4087-bf34-5eacd7afcc1a" />|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/658da0d6-d144-45ee-ac66-d34621a51923" />|
+
+
+
+

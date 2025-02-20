@@ -1,16 +1,62 @@
-### 프론트엔드 배포 파이프라인
+## 프론트엔드 배포 파이프라인
 
-개요
-![image](https://github.com/user-attachments/assets/e46b8a7f-cd87-4189-84f8-8184b5a5c95e)
+### 개요
+파이프라인은 Git 저장소에서 시작하여 GitHub Actions를 통한 CI/CD 프로세스를 거쳐 최종적으로 AWS 클라우드 인프라에 배포되는 과정을 포함합니다.
+
+<img width="854" alt="image" src="https://github.com/user-attachments/assets/252e90d5-5aa8-4768-b2ad-571204427946" />
+
+
+### 인프라 구성 요소
+
+#### 소스 관리 및 CI/CD
+- Git Repository: 애플리케이션의 소스 코드가 저장되는 버전 관리 시스템
+- GitHub Actions: 자동화된 빌드, 테스트 및 배포를 담당하는 CI/CD 플랫폼
+
+#### AWS 클라우드 인프라
+- Amazon S3: 정적 웹 사이트 호스팅을 위한 스토리지 버킷
+- Amazon CloudFront: 전역 콘텐츠 전송 네트워크(CDN)
+- IAM: AWS 리소스 접근 권한 관리
+- Bucket Policy: S3 버킷의 접근 정책 설정
+
+### 배포 프로세스 흐름
+
+1. 초기 설정 단계
+- Git 저장소 체크아웃
+- Node.js 18.x 런타임 환경 구성
+- 프로젝트 의존성 패키지 설치
+2. 빌드 단계
+- Next.js 프로젝트 빌드 실행
+- 정적 파일 및 애셋 생성
+3. AWS 배포 단계
+- AWS 자격 증명 구성
+- S3 버킷으로 빌드된 파일 동기화
+- CloudFront 캐시 무효화로 최신 콘텐츠 반영
+
+### 장점 및 이점
+
+#### 자동화
+- 수동 배포 과정 제거
+- 인적 오류 가능성 감소
+- 일관된 배포 프로세스 보장
+
+
+#### 확장성
+- CloudFront를 통한 글로벌 콘텐츠 전송
+- 트래픽 증가에 따른 자동 확장
+- 지연 시간 최소화
+
+#### 유지보수
+- 롤백 용이성
+- 배포 이력 추적 가능
 
 ## 주요 링크
 
-- S3 버킷 웹사이트 엔드포인트 : [http://jdj-aws-bucket.s3-website-ap-southeast-2.amazonaws.com/](http://bucket-nahee.s3-website-ap-northeast-1.amazonaws.com)
-- CloudFront 배포 도메인 이름 : [https://d2hnnj815xakwr.cloudfront.net](https://d2xkqga3hcd31j.cloudfront.net)
+- S3 버킷 웹사이트 엔드포인트 : http://bucket-nahee.s3-website-ap-northeast-1.amazonaws.com
+- CloudFront 배포 도메인 이름 : https://d2xkqga3hcd31j.cloudfront.net
 
 ## 주요 개념
 
-1. GitHub Actions과 CI/CD 도구
+### GitHub Actions과 CI/CD 도구
 
 #### GitHub Actions
 
@@ -39,7 +85,7 @@
 - CD (Continuous Deployment, 지속적 배포)
   - 코드 변경 사항을 자동으로 운영 환경(Production)에 배포하는 과정
 
-2. S3와 스토리지
+### S3와 스토리지
 
 #### S3
 
@@ -70,7 +116,7 @@
   - 여러 서버가 동시에 접근할 수 있는 공유 스토리지로 활용
   - AWS의 EFS(Elastic File System)
 
-3. CloudFront와 CDN
+### CloudFront와 CDN
 
 #### CloudFront
 
@@ -97,7 +143,7 @@
 - DNS 기반 라우팅:
   사용자의 요청을 가장 가까운 엣지 로케이션으로 라우팅해, 최적의 전송 경로를 선택함.
 
-4. 캐시 무효화(Cache Invalidation):
+### 캐시 무효화(Cache Invalidation):
    CDN이나 웹 캐시 시스템에 저장된 이전 버전의 데이터를 제거하거나 만료시켜, 사용자가 최신의 콘텐츠를 받을 수 있도록 하는 과정
 
 - 무효화 방법
@@ -108,7 +154,7 @@
 
 - CloudFront에서의 활용: AWS CloudFront에서는 무효화 요청을 통해 지정한 경로의 캐시를 삭제할 수 있다. 무효화 요청이 처리되면, 이후 사용자의 요청 시 오리진 서버에서 최신 콘텐츠를 다시 가져옴.
 
-5.  Repository secret과 환경변수
+###  Repository secret과 환경변수
 
 #### Repository Secret
 
@@ -131,17 +177,58 @@
 
 ## CDN과 성능 최적화
 
-#### 테스트 환경
-- S3 버킷 웹사이트 엔드포인트 : [http://jdj-aws-bucket.s3-website-ap-southeast-2.amazonaws.com/](http://bucket-nahee.s3-website-ap-northeast-1.amazonaws.com)
-- CloudFront 배포 도메인 이름 : [https://d2hnnj815xakwr.cloudfront.net](https://d2xkqga3hcd31j.cloudfront.net)
+### 개요
 
-CloudFront에 요청한 컨텐츠는 X-Cache: Hit from cloudfront 라는 헤더가 붙는다
+본 보고서는 CDN(Content Delivery Network) 도입 전후의 웹 애플리케이션 성능을 비교하고, 성능 최적화 효과를 분석하기 위해 작성되었습니다. 주요 측정 지표로는 페이지 로드 시간, 응답 속도, 서버 부하, 사용자 경험 향상을 고려하였습니다.
 
-|분류|S3|CloduFront|
-|----|----|----|
-|X-Cache 유무|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/052f41a8-c0a1-4e39-a957-afe78f9efd19" />|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/8a6b3a85-5fcb-405d-89a1-774346e8cd0e" />|
-|size & time 비교|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/5f8b9cf7-8996-4087-bf34-5eacd7afcc1a" />|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/658da0d6-d144-45ee-ac66-d34621a51923" />|
+### 테스트 환경
+- S3 버킷 웹사이트 엔드포인트 : [http://bucket-nahee.s3-website-ap-northeast-1.amazonaws.com](http://bucket-nahee.s3-website-ap-northeast-1.amazonaws.com)
+- CloudFront 배포 도메인 이름 : [[https://d2hnnj815xakwr.cloudfront.net](https://d2xkqga3hcd31j.cloudfront.net)
+### 테스트 방법
+
+- 크롬 브라우저 개발자 도구 Network 와 performance 확인
+- S3 버킷 웹사이트와 CloudFront 배포 웹사이트 비교
+- CloudFront에 요청한 컨텐츠는 X-Cache: Hit from cloudfront 라는 헤더가 붙는다
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/8a6b3a85-5fcb-405d-89a1-774346e8cd0e" />
 
 
+### S3와 CloudFront 성능 지표 비교
 
 
+####  페이지 로드
+
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/a20588c4-2243-4325-8e29-4eb7e3837478" />
+
+####  TTFB (Time to First Byte)
+
+![image](https://github.com/user-attachments/assets/03de3a69-6581-49b0-ace3-5cede086d881)
+
+#### LCP 비교
+
+|S3|CloudFront|
+|----|----|
+|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/a9426b5f-805e-44c6-9b73-b5948439926f" />|<img width="1440" alt="image" src="https://github.com/user-attachments/assets/269e8c45-c680-40c5-be0c-f6e1a59107ea" />|
+
+#### 성능 지표 분석
+|     지표      | S3 (CDN 도입 전) |	Cloudfront (CDN 도입 후) | 	개선율(%) |
+| ------------- | ----------------- | ------------ |------------ |
+|페이지 로드 시간 (초)      |343 ms        |102 ms         | 	70.26 |
+|TTFB (Time to First Byte)     |104.09 ms        | 8.57 ms        |  	91.76 |
+| Largest Contentful Paint (LCP) |  0.39 ms        |  0.12 ms      |  	69.23 |
+
+### 개선 효과
+
+- 응답 속도 향상: 페이지 로딩 시간이 70.26% 개선되었으며, Time to First Byte(TTFB)는 91.76% 감소하여 서버 응답 속도가 크게 개선됨.
+
+- Largest Contentful Paint(LCP) 개선: 주요 콘텐츠가 사용자 화면에 표시되는 시간이 69.23% 줄어 사용자 경험이 대폭 향상됨.
+
+- 서버 부하 감소: CDN을 활용하여 원본 서버의 요청 수가 줄어 리소스 사용량이 최적화됨.
+
+## 결론
+
+CDN을 통해 응답 속도가 빨라지고, 주요 콘텐츠 표시 시간이 단축되어 사용자 경험이 향상되었습니다.
+또한, 원본 서버에 대한 요청이 줄어들어 서버 부하가 감소하고 리소스 사용량이 최적화되었습니다.
+
+전체적으로 CDN 도입은 성능을 크게 향상시키고, 안정성을 높이는 데 기여했습니다.
+
+따라서 CDN 도입은 웹 애플리케이션의 성능을 크게 개선하고, 특히 대규모 트래픽을 처리하는 데 있어 중요한 역할을 합니다. 
